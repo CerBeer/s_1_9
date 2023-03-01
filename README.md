@@ -30,4 +30,14 @@ git clone https://github.com/CerBeer/s_1_8.git /home/box/web
 chmod a+x /home/box/web/init.sh
 /home/box/web/init.sh
 cd /home/box/web
-gunicorn -b 0.0.0.0:8080 hello:wsgi_application
+sudo ./init.sh
+sudo ./gunicorn -b 0.0.0.0:8080 hello:wsgi_application
+
+
+def wsgi_application(environ, start_responce):
+    status = '200 OK'
+    headers = [('Content-Type', 'text/plain')]
+    data = environ['QUERY_STRING'].split('&')
+    body = '\n'.join(data).encode('utf-8')
+    start_responce(status, headers)
+    return [body]
